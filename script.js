@@ -33,7 +33,7 @@
   // =================================================================================
   // PENTING: Ganti URL di bawah ini dengan URL Web App dari Google Apps Script kamu
   // =================================================================================
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwSdlzvzLnyAt7Sjx62iSKLzqsn_sbyMahckR3h6p3WhLHVxrOSebTa3n6jAwFre7kw/exec'; 
+  const SCRIPT_URL = '/api/submit-form';
 
 
   cvUploadArea.addEventListener('click', () => { cvInput.click(); });
@@ -221,4 +221,5 @@ function renderTable(data) {
 exportCsvButton.addEventListener('click', () => { if (registrationData.length === 0) { Swal.fire({ icon: 'warning', title: 'Tidak Ada Data', text: 'Tidak ada data untuk diekspor!' }); return; } const headers = Object.keys(registrationData[0]); let csvContent = headers.join(",") + "\n"; registrationData.forEach(item => { const row = headers.map(h => `"${item[h] || ''}"`).join(","); csvContent += row + "\n"; }); const blob = new Blob([csvContent], { type: "text/csv" }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "data_pendaftar_jobfair.csv"; link.click(); });
 refreshButton.addEventListener('click', fetchAdminData);
 searchInput.addEventListener('input', (e) => { const term = e.target.value.toLowerCase(); if (term) { const filtered = registrationData.filter(item => (item['Nama Lengkap'] && item['Nama Lengkap'].toLowerCase().includes(term)) || (item['Email'] && item['Email'].toLowerCase().includes(term)) || (item['Nomor Telepon'] && item['Nomor Telepon'].includes(term))); renderTable(filtered); document.getElementById('data-count').textContent = filtered.length; } else { renderTable(registrationData); document.getElementById('data-count').textContent = registrationData.length; } });
+
 
