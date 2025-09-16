@@ -1,7 +1,7 @@
-// File: /api/submit-form.js (UPDATED)
+
 
 export default async function handler(req, res) {
-  // Ambil URL rahasia dari environment variable
+
   const SCRIPT_URL = process.env.GAS_WEB_APP_URL;
 
   if (!SCRIPT_URL) {
@@ -9,19 +9,19 @@ export default async function handler(req, res) {
   }
 
   try {
-    // === BAGIAN BARU: Menangani request GET untuk Admin Panel ===
+    
     if (req.method === 'GET') {
-      const response = await fetch(SCRIPT_URL); // Cukup fetch biasa untuk GET
+      const response = await fetch(SCRIPT_URL); 
       
       if (!response.ok) {
         throw new Error(`Google Script (GET) request failed with status ${response.status}`);
       }
       
       const data = await response.json();
-      return res.status(200).json(data); // Kirim data kembali ke admin panel
+      return res.status(200).json(data); 
     }
 
-    // === BAGIAN LAMA: Menangani request POST untuk Form Pendaftaran ===
+   
     if (req.method === 'POST') {
       const response = await fetch(SCRIPT_URL, {
         method: 'POST',
@@ -33,10 +33,10 @@ export default async function handler(req, res) {
       }
 
       const result = await response.json();
-      return res.status(200).json(result); // Kirim hasil sukses/gagal ke form
+      return res.status(200).json(result); 
     }
 
-    // Jika metodenya bukan GET atau POST, tolak
+    
     return res.status(405).json({ status: 'error', message: 'Method Not Allowed' });
 
   } catch (error) {
