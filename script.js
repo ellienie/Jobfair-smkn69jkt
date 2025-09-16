@@ -30,9 +30,7 @@
   const tabForm = document.getElementById('tab-form');
   const tabAdmin = document.getElementById('tab-admin');
 
-  // =================================================================================
-  // PENTING: Ganti URL di bawah ini dengan URL Web App dari Google Apps Script kamu
-  // =================================================================================
+
   const SCRIPT_URL = '/api/submit-form';
 
 
@@ -71,7 +69,7 @@
     fileInfo.classList.add('hidden');
   }
 
-  // --- Logic Form Pendaftaran (INI BAGIAN YANG DIPERBARUI) ---
+ 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -85,12 +83,12 @@
     loadingSpinner.classList.remove('hidden');
 
     const reader = new FileReader();
-    reader.readAsDataURL(selectedFile); // Membaca file sebagai Data URL (Base64)
+    reader.readAsDataURL(selectedFile); 
 
     reader.onload = async () => {
-      const fileBase64 = reader.result.split('base64,')[1]; // Mengambil hanya data base64-nya
+      const fileBase64 = reader.result.split('base64,')[1]; 
 
-      // Mengumpulkan semua data form ke dalam satu objek
+      
       const formDataObject = {
         fullName: document.getElementById('fullName').value,
         gender: document.querySelector('input[name="gender"]:checked')?.value || '',
@@ -102,7 +100,7 @@
         email: document.getElementById('email').value,
         socialMedia: document.getElementById('socialMedia').value,
         company: document.getElementById('company').value,
-        // Data file yang akan dikirim
+      
         cvFile: fileBase64,
         cvFileName: selectedFile.name,
         cvMimeType: selectedFile.type,
@@ -111,7 +109,7 @@
       try {
         const response = await fetch(SCRIPT_URL, {
           method: 'POST',
-          body: JSON.stringify(formDataObject) // Mengirim objek sebagai string JSON
+          body: JSON.stringify(formDataObject) 
         });
 
         if (!response.ok) throw new Error('Network response was not ok');
@@ -145,7 +143,7 @@
     };
   });
 
-  // --- Sisa kode untuk Admin Panel (Diperbarui untuk menampilkan semua field termasuk perusahaan) ---
+
   function showAdminLoginModal() { adminLoginModal.style.display = 'block'; modalBackdrop.style.display = 'block'; document.body.style.overflow = 'hidden'; }
 function hideAdminLoginModal() { adminLoginModal.style.display = 'none'; modalBackdrop.style.display = 'none'; document.body.style.overflow = 'auto'; }
 tabForm.addEventListener('click', () => { formContainer.classList.remove('hidden'); adminContainer.classList.add('hidden'); tabForm.classList.add('bg-indigo-600','text-white', 'tab-active'); tabForm.classList.remove('hover:bg-gray-50', 'text-gray-600'); tabAdmin.classList.remove('bg-indigo-600','text-white', 'tab-active'); tabAdmin.classList.add('hover:bg-gray-50', 'text-gray-600'); clearInterval(updateIntervalId); });
@@ -153,7 +151,7 @@ tabAdmin.addEventListener('click', () => { showAdminLoginModal(); });
 closeAdminModal.addEventListener('click', hideAdminLoginModal);
 modalBackdrop.addEventListener('click', hideAdminLoginModal);
 
-// Bagian ini telah diubah untuk menggunakan Vercel Function
+
 adminLoginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.getElementById('admin-username').value;
@@ -221,5 +219,6 @@ function renderTable(data) {
 exportCsvButton.addEventListener('click', () => { if (registrationData.length === 0) { Swal.fire({ icon: 'warning', title: 'Tidak Ada Data', text: 'Tidak ada data untuk diekspor!' }); return; } const headers = Object.keys(registrationData[0]); let csvContent = headers.join(",") + "\n"; registrationData.forEach(item => { const row = headers.map(h => `"${item[h] || ''}"`).join(","); csvContent += row + "\n"; }); const blob = new Blob([csvContent], { type: "text/csv" }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = "data_pendaftar_jobfair.csv"; link.click(); });
 refreshButton.addEventListener('click', fetchAdminData);
 searchInput.addEventListener('input', (e) => { const term = e.target.value.toLowerCase(); if (term) { const filtered = registrationData.filter(item => (item['Nama Lengkap'] && item['Nama Lengkap'].toLowerCase().includes(term)) || (item['Email'] && item['Email'].toLowerCase().includes(term)) || (item['Nomor Telepon'] && item['Nomor Telepon'].includes(term))); renderTable(filtered); document.getElementById('data-count').textContent = filtered.length; } else { renderTable(registrationData); document.getElementById('data-count').textContent = registrationData.length; } });
+
 
 
